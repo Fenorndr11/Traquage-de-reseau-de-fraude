@@ -31,13 +31,6 @@ def probabilite_gnp(n):
     Calcule la probabilité p utilisée pour G(n,p).
 
     Formule : p = ln(n)/n + 0.1: seuil de connexité d'Erdős–Rényi, augmenté de 0.1 pour s'assurer que G est presque connexe avant connexification.
-
-    Preuve du seuil :
-        Soit X_v = 1 si le sommet v est isolé.
-        E[X_v] = (1-p)^(n-1) ≈ e^{-p(n-1)}
-        Si p = ln(n)/n : E[X_v] ≈ e^{-ln(n)} = 1/n
-        E[nb isolés] = n · 1/n = 1  → fini, donc presque tous connectés
-        Pour p > ln(n)/n, E[nb isolés] → 0  → connexe avec haute probabilité
     """
     if n <= 1:
         return 1.0
@@ -102,9 +95,6 @@ def connexifier(G):
     return Gp, len(composantes), ponts_ajoutes
 
 # PARTIE 3 — PARCOURS EN LARGEUR DE G' AVEC COLORIAGE
-
-
-# Convention de couleurs BFS (algorithme CLRS) :
 #   BLANC  : non découvert
 #   GRIS   : découvert, en attente de traitement
 #   NOIR   : traité (tous ses voisins explorés)
@@ -184,16 +174,11 @@ def classifier_suspects(cliques, n, seuil_taille=3):
     Classe les cliques en niveaux de suspicion.
 
     Critères :
-      - CRITIQUE  : taille ≥ seuil_taille ET taille/n ≥ 0.15
-      - ÉLEVÉ     : taille ≥ seuil_taille ET taille/n ≥ 0.08
-      - MODÉRÉ    : taille ≥ seuil_taille
-      - (ignorées): taille < seuil_taille
-
+      CRITIQUE  : taille ≥ seuil_taille ET taille/n ≥ 0.15
+      ÉLEVÉ     : taille ≥ seuil_taille ET taille/n ≥ 0.08
+      MODÉRÉ    : taille ≥ seuil_taille
+      (ignorées): taille < seuil_taille
     Score = taille / n  (part du graphe que forme la clique)
-
-    Dans le contexte de détection d'intrus :
-      une grande clique = sous-réseau très dense où tous se connaissent
-      → structure caractéristique d'un réseau organisé suspect
     """
     suspects = []
     for i, clique in enumerate(cliques):
